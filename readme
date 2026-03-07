@@ -1,0 +1,66 @@
+# Shamba AI
+
+## How to Open the AI
+
+1. Ensure **Docker** and **Docker Compose** are installed on your system.
+2. Clone this repository and navigate to its root directory.
+3. Copy the `.env.example` file to `.env` and configure any necessary environment variables (e.g., `HF_API_KEY`).
+4. To start all the required services (Frontend, Backend, PostgreSQL, and ChromaDB), run the following command:
+   ```bash
+   docker-compose up --build
+   ```
+5. Once the containers are fully started, open your web browser and navigate to:
+   **[http://localhost:3000](http://localhost:3000)** to interact with the Shamba AI.
+
+## Project Structure
+shamba-ai/
+│
+├── .env
+├── .env.example
+├── .gitignore
+├── docker-compose.yml
+│
+├── backend/
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   ├── entrypoint.sh
+│   │
+│   ├── app.py                    ← FastAPI routes
+│   ├── rag_pipeline.py           ← search + LLM logic
+│   ├── db_init.py                ← create/validate ChromaDB collection
+│   ├── ingest.py                 ← load, chunk, embed all docs
+│   │
+│   └── data/
+│       ├── swahili/
+│       │   ├── mazao_magonjwa.txt       ← crop disease symptoms
+│       │   ├── msimu_wa_kupanda.txt     ← planting seasons
+│       │   ├── mbolea_kenya.txt         ← fertilizer recommendations
+│       │   └── mifugo.txt               ← livestock care
+│       │
+│       ├── kikuyu/
+│       │   ├── mirimu_ya_mimea.txt      ← crop diseases in Kikuyu
+│       │   ├── mbeu_na_mbura.txt        ← seeds and rainfall
+│       │   └── thaara_ya_ngombe.txt     ← cattle care
+│       │
+│       └── pdfs/                        ← Ministry of Ag, FAO docs
+│           ├── kenya_fertilizer_guide.pdf
+│           ├── fao_maize_guide.pdf
+│           ├── coffee_farming_manual.pdf
+│           ├── tea_farming_manual.pdf
+│           └── crop_disease_kenya.pdf
+│
+├── frontend/
+│   ├── Dockerfile
+│   ├── package.json
+│   └── src/
+│       ├── index.js
+│       ├── App.jsx
+│       └── components/
+│           ├── ChatBox.jsx              ← conversation thread UI
+│           ├── VoiceInput.jsx           ← mic + text input bar
+│           ├── MessageBubble.jsx        ← individual chat message
+│           ├── BotAvatar.jsx            ← Mkulima bot identity
+│           └── TopicQuickSelect.jsx     ← quick buttons for common topics
+│
+└── vectordb/
+    └── chroma_data/

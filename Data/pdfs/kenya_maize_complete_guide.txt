@@ -1,0 +1,159 @@
+KENYA MAIZE PRODUCTION - COMPLETE GUIDE
+Source: KALRO, Ministry of Agriculture Kenya
+
+=== VARIETIES BY ZONE ===
+
+HIGHLAND ZONES (above 1800m) - Kiambu, Nyeri, Nyandarua, Nakuru:
+- H614D: Most popular, disease tolerant, 120-140 days to maturity
+- DK8031: High yield, tolerant to Gray Leaf Spot
+- SC403: Good for highland areas
+- WH507: Widely adapted variety
+
+MIDLAND ZONES (1200-1800m) - Machakos, Kitui, parts of Rift Valley:
+- H513: Medium maturity, good yield
+- DK777: High yield, medium altitude
+- WH507: Widely adapted
+
+LOWLAND/DRY ZONES (below 1200m) - Coast, Ukambani, ASAL areas:
+- WEMA (Water Efficient Maize for Africa): Most drought tolerant
+- Duma 43: Short season 90 days, drought tolerant
+- H614D: Also performs well in lowlands
+- WH403: Suited for dry lowlands
+
+=== PLANTING CALENDAR ===
+
+Central Kenya (Kiambu, Nyeri, Murang'a, Kirinyaga):
+- Long rains: February - March
+- Short rains: October - November
+
+Rift Valley (Nakuru, Nandi, Uasin Gishu):
+- Long rains: March - April
+- Short rains: August - September (some areas)
+
+Western Kenya (Kakamega, Bungoma, Trans Nzoia):
+- Long rains: March - April
+- Short rains: August - September
+
+Eastern Kenya (Machakos, Kitui, Meru):
+- Long rains: March - April (plant immediately at first rains)
+- Short rains: October (very important to plant early)
+
+Coast (Kilifi, Kwale, Taita Taveta):
+- Long rains: March - April
+- Short rains: October - November
+
+RULE: Plant within 2-3 days of first reliable rains.
+
+=== LAND PREPARATION ===
+- Plough to 20-25cm depth
+- Harrow to break clods
+- Make furrows or planting holes
+- Row spacing: 75cm between rows
+- Plant spacing: 25-30cm between plants
+- Population: 53,000 plants per hectare
+
+=== FERTILIZER RECOMMENDATIONS (KALRO Official) ===
+
+PLANTING FERTILIZER:
+Option 1 (Best): DAP 50kg per acre (2.5 bags per hectare)
+Option 2: MAP 46kg per acre
+Option 3: NPK 23:23:0 - 2 bags per acre
+- Place fertilizer in planting hole, cover with thin soil before placing seed
+- NEVER let seed touch fertilizer directly
+
+TOPDRESSING (3-4 weeks after planting):
+Option 1 (Cheapest): CAN 50kg per acre (3 bags per hectare)
+Option 2: Urea 25kg per acre (cheaper but needs care)
+- Apply when soil is moist
+- Place fertilizer 5cm from stem, not directly on plant
+
+COMBINED ORGANIC + INORGANIC (best for soil health):
+- 5 tons FYM/compost + 1.25 bags DAP + 1.5 bags CAN per hectare
+- OR 10 tons FYM/compost alone per hectare
+- Organic matter improves soil structure and water holding
+
+=== WEED CONTROL ===
+- First weeding: 2-3 weeks after planting (CRITICAL)
+- Second weeding: 6-7 weeks after planting
+- Herbicide: Atrazine (pre-emergence), apply before weeds appear
+- Hand weeding also effective for small farms
+
+=== MAJOR DISEASES ===
+
+1. GRAY LEAF SPOT (Madoa ya Kijivu)
+Caused by: Cercospora zeae-maydis fungus
+Symptoms: Rectangular gray-brown spots on leaves, spots merge
+Favored by: Cool humid weather, dense planting
+Control: 
+- Mancozeb or Chlorothalonil spray
+- Plant resistant varieties: DK8031, H614D
+- Crop rotation
+- Remove crop residues after harvest
+
+2. NORTHERN LEAF BLIGHT
+Caused by: Exserohilum turcicum fungus
+Symptoms: Long tan-colored lesions on leaves, cigar-shaped
+Control:
+- Propiconazole fungicide spray
+- Plant resistant varieties
+- Improve air circulation
+
+3. MAIZE STREAK VIRUS
+Caused by: Virus spread by leafhoppers (tiny insects)
+Symptoms: Yellow streaks on leaves, stunted growth
+Control:
+- NO CURE - prevention only
+- Imidacloprid seed treatment or spray to kill leafhoppers
+- Plant resistant varieties
+- Remove infected plants immediately
+
+4. MAIZE LETHAL NECROSIS (MLN) - SERIOUS IN KENYA
+Caused by: Two viruses together (MCMV + SCMV)
+Symptoms: Yellowing from leaf tips, premature death, no cobs
+Found in: Rift Valley, Western Kenya, Eastern Kenya
+Control:
+- Plant MLN tolerant varieties: SEEDCO SC403, DK8031 new versions
+- Remove infected plants, burn them
+- Control aphids and thrips (vectors) with Dimethoate
+- Do not plant ratoon crops in affected areas
+
+5. STALK ROTS
+Caused by: Fusarium and Diplodia fungi
+Symptoms: Stem rot from base, plant falls over before harvest
+Control:
+- Avoid waterlogging
+- Balanced fertilization (don't over-apply nitrogen)
+- Plant resistant varieties
+
+=== PESTS ===
+
+FALL ARMYWORM (Spodoptera frugiperda) - MAJOR PEST SINCE 2016
+Symptoms: Window paning on leaves, holes in whorl, sawdust-like frass
+Control:
+- Spray at first sign: Coragen (Chlorantraniliprole) - most effective
+- Ampligo, Voliam Targo also effective
+- Traditional: Ash or sand in whorl of young plants
+- Biological: Trichogramma parasitic wasps
+
+STALK BORER (Busseola fusca) - Traditional pest
+Symptoms: Dead heart in young plants, holes in stem
+Control:
+- Permethrin dust 2.5kg per hectare at 4-5 weeks
+- Dipterex at 4kg per hectare
+- Spray into whorl at first sign
+
+APHIDS
+Symptoms: Colonies on leaves, sticky honeydew, yellowing
+Control: Dimethoate or Imidacloprid spray
+
+=== HARVESTING & STORAGE ===
+- Harvest when husks are brown and dry
+- Moisture should be below 13% for safe storage
+- Dry on raised platforms, not on ground
+- Use hermetic storage bags (PICS bags) to prevent weevils
+- Actellic Super dust for storage protection
+- Expected yields with good management: 5-7 tons per hectare
+
+=== CONTACTS ===
+KALRO Headquarters: 0722 206 986
+Ministry of Agriculture: www.kilimo.go.ke

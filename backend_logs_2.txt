@@ -1,0 +1,100 @@
+﻿shamba_backend  |     ≡ƒôä KALRO_MINERAL_FERTILIZERS_IN_KENYA.pdf (18 pages)
+shamba_backend  |     ≡ƒôä KARI_Use_of_Organic_and_anorganic_fertilizers_MaizeVegetables_finger_millet_kenya_.pdf (16 pages)
+shamba_backend  |     ≡ƒôä coffee_tea_farming_guide.txt (1 pages)
+shamba_backend  |     ≡ƒôä kahawa_bilingual.txt (1 pages)
+shamba_backend  |     ≡ƒôä kahawa_english.txt (1 pages)
+shamba_backend  |     ≡ƒôä kenya_agriculture_guide.txt (1 pages)
+shamba_backend  |     ≡ƒôä kenya_horticulture_food_crops.txt (1 pages)
+shamba_backend  |     ≡ƒôä kenya_livestock_complete_guide.txt (1 pages)
+shamba_backend  |     ≡ƒôä kenya_maize_complete_guide.txt (1 pages)
+shamba_backend  |     ≡ƒôÜ PDFs: 41 pages loaded
+shamba_backend  | 
+shamba_backend  |   ≡ƒôè Total chunks to embed: 699
+shamba_backend  |   Embedding via HuggingFace API (this may take a few minutes)...
+shamba_backend  |     ΓÜá∩╕Å  HF API error 410: {"error":"https://api-inference.huggingface.co is no longer supported. Please use https://router.hug
+shamba_backend  |     ΓÜá∩╕Å  HF API error 410: {"error":"https://api-inference.huggingface.co is no longer supported. Please use https://router.hug
+shamba_backend  |     ΓÜá∩╕Å  HF API error 410: {"error":"https://api-inference.huggingface.co is no longer supported. Please use https://router.hug
+shamba_backend  |     ΓÜá∩╕Å  HF API error 410: {"error":"https://api-inference.huggingface.co is no longer supported. Please use https://router.hug
+shamba_backend  |     ΓÜá∩╕Å  HF API error 410: {"error":"https://api-inference.huggingface.co is no longer supported. Please use https://router.hug
+shamba_backend  |     Γ¥î Failed to embed batch 1 after attempts
+shamba_backend  |   Γ¥î Ingestion failed due to embedding errors.
+shamba_backend  | 
+shamba_backend  | Step 3/3: Starting API server...
+shamba_backend  | INFO:     Will watch for changes in these directories: ['/app']
+shamba_backend  | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+shamba_backend  | INFO:     Started reloader process [1] using StatReload
+shamba_backend  | /app/rag_pipeline.py:46: LangChainDeprecationWarning: The class `Chroma` was deprecated in LangChain 0.2.9 and will be removed in 1.0. An updated version of the class exists in the :class:`~langchain-chroma package and should be used instead. To use it run `pip install -U :class:`~langchain-chroma` and import as `from :class:`~langchain_chroma import Chroma``.
+shamba_backend  |   vectorstore = Chroma(
+shamba_backend  | INFO:     Started server process [33]
+shamba_backend  | INFO:     Waiting for application startup.
+shamba_backend  | INFO:     Application startup complete.
+shamba_backend  | INFO:     Shutting down
+shamba_backend  | INFO:     Waiting for application shutdown.
+shamba_backend  | INFO:     Application shutdown complete.
+shamba_backend  | INFO:     Finished server process [33]
+shamba_backend  | INFO:     Stopping reloader process [1]
+shamba_backend  | ============================================
+shamba_backend  |    Shamba AI - Starting up...
+shamba_backend  | ============================================
+shamba_backend  | 
+shamba_backend  | Step 1/3: Initializing database...
+shamba_backend  |   [ChromaDB] Connecting to chromadb:8000...
+shamba_backend  |   [ChromaDB] Γ£à Connection healthy
+shamba_backend  |   [ChromaDB] Γ£à Collection 'shamba_rag' exists (0 vectors)
+shamba_backend  | 
+shamba_backend  |   [PostgreSQL] Connecting to postgres:5432...
+shamba_backend  |   [PostgreSQL] Γ£à Connection healthy
+shamba_backend  |   [PostgreSQL] Γ£à Table 'conversation_history' ready
+shamba_backend  | 
+shamba_backend  |   Γ£à All databases initialized
+shamba_backend  | 
+shamba_backend  | 
+shamba_backend  | Step 2/3: Ingesting documents...
+shamba_backend  |   Loading text documents...
+shamba_backend  |     ≡ƒô¥ afya_udongo_hali_hewa.txt
+shamba_backend  |     ≡ƒô¥ magonjwa_mifugo_kamili.txt
+shamba_backend  |     ≡ƒô¥ magonjwa_wadudu_kisasa.txt
+shamba_backend  |     ≡ƒô¥ magonjwa_ya_mazao.txt
+shamba_backend  |     ≡ƒô¥ mazao_magonjwa.txt
+shamba_backend  |     ≡ƒô¥ mbolea_kenya.txt
+shamba_backend  |     ≡ƒô¥ mbolea_ya_mimea.txt
+shamba_backend  |     ≡ƒô¥ mifugo.txt
+shamba_backend  |     ≡ƒô¥ msimu_wa_kupanda.txt
+shamba_backend  |     ≡ƒô¥ utunzaji_mifugo.txt
+shamba_backend  |     ≡ƒô¥ ihinda_na_nyamu.txt
+shamba_backend  |     ≡ƒô¥ kahawa_kikuyu.txt
+shamba_backend  |     ≡ƒô¥ mbolea_kenya.txt
+shamba_backend  |     ≡ƒô¥ mirimu_ya_mimea.txt
+shamba_backend  |     ≡ƒç░≡ƒç¬ Swahili: 10 documents
+shamba_backend  |     Kikuyu:   4 documents
+shamba_backend  |   Loading PDF documents...
+shamba_backend  |     ≡ƒôä KALRO_MINERAL_FERTILIZERS_IN_KENYA.pdf (18 pages)
+shamba_backend  |     ≡ƒôä KARI_Use_of_Organic_and_anorganic_fertilizers_MaizeVegetables_finger_millet_kenya_.pdf (16 pages)
+shamba_backend  |     ≡ƒôä coffee_tea_farming_guide.txt (1 pages)
+shamba_backend  |     ≡ƒôä kahawa_bilingual.txt (1 pages)
+shamba_backend  |     ≡ƒôä kahawa_english.txt (1 pages)
+shamba_backend  |     ≡ƒôä kenya_agriculture_guide.txt (1 pages)
+shamba_backend  |     ≡ƒôä kenya_horticulture_food_crops.txt (1 pages)
+shamba_backend  |     ≡ƒôä kenya_livestock_complete_guide.txt (1 pages)
+shamba_backend  |     ≡ƒôä kenya_maize_complete_guide.txt (1 pages)
+shamba_backend  |     ≡ƒôÜ PDFs: 41 pages loaded
+shamba_backend  | 
+shamba_backend  |   ≡ƒôè Total chunks to embed: 699
+shamba_backend  |   Embedding via HuggingFace API (this may take a few minutes)...
+shamba_backend  |     ΓÜá∩╕Å  HF API error 410: {"error":"https://api-inference.huggingface.co is no longer supported. Please use https://router.hug
+shamba_backend  |     ΓÜá∩╕Å  HF API error 410: {"error":"https://api-inference.huggingface.co is no longer supported. Please use https://router.hug
+shamba_backend  |     ΓÜá∩╕Å  HF API error 410: {"error":"https://api-inference.huggingface.co is no longer supported. Please use https://router.hug
+shamba_backend  |     ΓÜá∩╕Å  HF API error 410: {"error":"https://api-inference.huggingface.co is no longer supported. Please use https://router.hug
+shamba_backend  |     ΓÜá∩╕Å  HF API error 410: {"error":"https://api-inference.huggingface.co is no longer supported. Please use https://router.hug
+shamba_backend  |     Γ¥î Failed to embed batch 1 after attempts
+shamba_backend  |   Γ¥î Ingestion failed due to embedding errors.
+shamba_backend  | 
+shamba_backend  | Step 3/3: Starting API server...
+shamba_backend  | INFO:     Will watch for changes in these directories: ['/app']
+shamba_backend  | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+shamba_backend  | INFO:     Started reloader process [1] using StatReload
+shamba_backend  | /app/rag_pipeline.py:46: LangChainDeprecationWarning: The class `Chroma` was deprecated in LangChain 0.2.9 and will be removed in 1.0. An updated version of the class exists in the :class:`~langchain-chroma package and should be used instead. To use it run `pip install -U :class:`~langchain-chroma` and import as `from :class:`~langchain_chroma import Chroma``.
+shamba_backend  |   vectorstore = Chroma(
+shamba_backend  | INFO:     Started server process [32]
+shamba_backend  | INFO:     Waiting for application startup.
+shamba_backend  | INFO:     Application startup complete.

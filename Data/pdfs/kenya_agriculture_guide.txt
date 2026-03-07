@@ -1,0 +1,145 @@
+KENYA GENERAL AGRICULTURE GUIDE
+Source: Ministry of Agriculture Kenya & KALRO
+
+=== MAIZE PRODUCTION IN KENYA ===
+
+IMPORTANCE:
+Maize is the staple food crop of Kenya, grown by over 75% of smallholder farmers.
+Annual production: 3-4 million metric tons
+Main growing regions: Rift Valley, Western, Nyanza, Central
+
+SEED SELECTION:
+Certified hybrid seeds give 2-3 times more yield than local varieties.
+Recommended varieties by zone:
+- Highland (above 1800m): H614D, DK8031, SC403
+- Midland (1200-1800m): WH507, H513, DK777
+- Lowland (below 1200m): H614D, WH403, Duma 43
+- Drought prone areas: WEMA varieties, DH04
+
+LAND PREPARATION:
+- Plough to depth of 20-25cm
+- Harrow to break clods
+- Make furrows or holes 75cm between rows, 25cm between plants
+
+PLANTING:
+- Plant 2 seeds per hole, thin to 1 after germination
+- Depth: 5-7cm
+- Population: 53,000 plants per hectare
+
+WEED CONTROL:
+- First weeding: 2-3 weeks after planting
+- Second weeding: 6-7 weeks after planting
+- Herbicides: Atrazine (pre-emergence), Primagram Gold
+
+HARVESTING:
+- Harvest when husks are dry and brown
+- Moisture content should be below 13% for storage
+- Average yield: 2-3 tons/ha (smallholder), up to 8 tons/ha (commercial)
+
+=== POTATO PRODUCTION ===
+
+VARIETIES:
+- Dutch Robjin: Most popular, good yield, moderate disease resistance
+- Kenya Mpya: Bred for Kenya, good blight resistance
+- Sherekea: High yield, suitable for chips
+- Shangi: Good for boiling and chips
+
+SEED:
+- Always use certified seed potato
+- Seed rate: 1,500-2,000kg per hectare
+- Chit seed (sprout) before planting for uniform emergence
+
+PLANTING:
+- Ridge and furrow system
+- Row spacing: 75cm, plant spacing: 30cm
+- Planting depth: 10-15cm
+
+DISEASE MANAGEMENT:
+Late blight (most serious):
+- Spray preventively before disease appears
+- Ridomil Gold MZ, Mancozeb, Dithane M45
+- Spray every 7-10 days during wet season
+
+=== HORTICULTURE - TOMATOES ===
+
+VARIETIES:
+- Anna F1: Very popular, good yield, virus resistant
+- Rambo F1: Large fruits, good shelf life
+- Tylka F1: Early maturing, suitable for highlands
+- Money Maker: Open pollinated, good for processing
+
+NURSERY:
+- Raise seedlings in nursery for 4-6 weeks
+- Treat nursery soil with Dithane before planting
+- Harden seedlings before transplanting
+
+TRANSPLANTING:
+- Transplant at 4-6 leaf stage
+- Spacing: 60cm x 60cm
+- Water immediately after transplanting
+
+STAKING:
+- Stake indeterminate varieties at 30cm height
+- Use sisal string or wire for support
+
+COMMON PESTS:
+1. Tomato Leafminer (Tuta absoluta) - very destructive
+   Control: Coragen, Ampligo, pheromone traps
+2. Whitefly - spreads viruses
+   Control: Confidor, Actara
+3. Spider Mites - yellowing and webbing
+   Control: Dynamec, Abamectin
+
+=== SOIL FERTILITY MANAGEMENT ===
+
+SOIL pH:
+- Most crops prefer pH 5.5-7.0
+- Below 5.5: Apply agricultural lime
+- Apply lime 2-3 months before planting
+- Rate: 2-4 tons per hectare depending on soil test
+
+INTEGRATED SOIL FERTILITY MANAGEMENT (ISFM):
+Combine:
+1. Mineral fertilizers (DAP, CAN, NPK)
+2. Organic matter (compost, manure, crop residues)
+3. Improved varieties
+4. Good agronomic practices
+
+Benefits:
+- Reduces fertilizer cost by 30-50%
+- Improves soil structure
+- Increases water holding capacity
+- Sustainable long-term productivity
+
+COMPOSTING:
+Materials: Crop residues, kitchen waste, manure, grass
+Process:
+1. Layer materials in 1m x 1m x 1m heap
+2. Keep moist but not waterlogged
+3. Turn every 2 weeks
+4. Ready in 2-3 months
+5. Apply 5 tons per hectare
+
+=== CLIMATE SMART AGRICULTURE ===
+
+DROUGHT MANAGEMENT:
+- Plant drought tolerant varieties
+- Mulching reduces water loss by 60%
+- Tied ridges harvest rainwater
+- Zai pits capture rainwater for dry areas
+
+CONSERVATION AGRICULTURE:
+- Minimum tillage - disturb soil as little as possible
+- Permanent soil cover - mulch or cover crops
+- Crop rotation - rotate cereals with legumes
+
+Benefits of crop rotation:
+- Breaks pest and disease cycles
+- Improves soil fertility (legumes fix nitrogen)
+- Reduces fertilizer costs
+- Increases yields
+
+CONTACT INFORMATION:
+Ministry of Agriculture Kenya: www.kilimo.go.ke
+KALRO: www.kalro.org, Tel: 020 4183301
+Kenya Meteorological Department: www.meteo.go.ke

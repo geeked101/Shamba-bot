@@ -1,0 +1,294 @@
+KENYA LIVESTOCK DISEASE GUIDE - CATTLE, GOATS, SHEEP, POULTRY
+Source: KALRO, Ministry of Agriculture, GALVmed Kenya Survey
+
+=== CATTLE DISEASES ===
+
+1. EAST COAST FEVER (ECF / Ndigana Kali) - MOST IMPORTANT IN KENYA
+Cause: Theileria parva parasite, spread by brown ear tick
+Symptoms:
+- High fever (above 40°C)
+- Swollen lymph nodes especially behind ear and in groin
+- Watery eyes, nasal discharge
+- Difficulty breathing, animal stands with legs apart
+- Death within 2-3 weeks if untreated
+Treatment:
+- Buparvaquone (Butalex) injection - MUST be given by vet EARLY
+- Cost: around KSh 1,500-3,000 per treatment
+Prevention:
+- Immunization: ITM (Infection and Treatment Method) - once in lifetime
+- Regular tick control: dip or spray every 7-14 days
+- Acaricide: Triatix, Diazinon, Bayticol
+- Check cattle DAILY for ticks especially in ears
+
+2. FOOT AND MOUTH DISEASE (FMD)
+Cause: Highly contagious virus
+Symptoms:
+- Blisters on mouth, tongue, feet, teats
+- Excessive salivation, drooling
+- Limping, reluctance to walk
+- Drop in milk production
+Treatment:
+- NO CURE - supportive treatment only
+- Isolate ALL infected animals IMMEDIATELY
+- Report to veterinary officer - it is a notifiable disease
+- Antibiotics to prevent secondary infections
+Prevention:
+- Vaccination every 6 months
+- Do not move animals from infected areas
+
+3. LUMPY SKIN DISEASE
+Cause: Lumpy Skin Disease Virus, spread by insects
+Symptoms:
+- Raised nodules (lumps) on skin all over body
+- Fever, nasal discharge
+- Reduced milk production
+- Swollen lymph nodes
+Treatment:
+- No specific treatment
+- Anti-inflammatory drugs for fever
+- Antibiotics to prevent secondary infections
+Prevention:
+- Vaccination every year
+- Control biting insects (flies, mosquitoes)
+
+4. BRUCELLOSIS (Ondoa Mimba)
+Cause: Brucella abortus bacteria
+Symptoms:
+- Abortion in last 3 months of pregnancy
+- Retained placenta
+- Swollen joints in bulls
+- Humans can get infected (fever, joint pain)
+Treatment:
+- No treatment - cull infected animals
+- Do NOT drink raw milk from infected cows
+Prevention:
+- Vaccinate female calves at 3-8 months (RB51 or S19 vaccine)
+- Test bulls before buying
+- Do not introduce new animals without testing
+
+5. CONTAGIOUS BOVINE PLEUROPNEUMONIA (CBPP / Ndigana)
+Cause: Mycoplasma mycoides bacteria
+Symptoms:
+- Painful breathing, coughing
+- Animal stands with legs apart, head down
+- Fever
+- Death in severe cases
+Treatment:
+- Oxytetracycline injection - only slows disease
+- Report to vet - notifiable disease
+Prevention:
+- Vaccination every year
+- Do not mix herds without quarantine
+
+6. ANTHRAX (Sotoka)
+Cause: Bacillus anthracis bacteria
+Symptoms:
+- SUDDEN DEATH with no prior symptoms
+- Blood from body openings after death
+- DO NOT OPEN CARCASS - spreads spores
+Treatment:
+- Penicillin if caught very early
+- Usually no time to treat - death is rapid
+Prevention:
+- Vaccination every year (April-May before rains)
+- BURN or deeply bury carcasses - do NOT skin or eat
+
+7. BLACKQUARTER (Kimeta)
+Cause: Clostridium chauvoei bacteria
+Affects: Young cattle 6-24 months, well-fed animals
+Symptoms:
+- Sudden lameness, swelling in shoulder/hindquarter
+- Crackling sound when pressing swelling
+- Death within 12-36 hours
+Treatment:
+- High dose penicillin very early - often too late
+Prevention:
+- Vaccination every year
+- Most common after start of rains
+
+8. MASTITIS (Maziwa Mabaya)
+Cause: Various bacteria infecting udder
+Symptoms:
+- Hot, swollen, painful udder
+- Watery, stringy, or bloody milk
+- Cow reluctant to be milked
+Treatment:
+- Intramammary antibiotic tubes (Mastijet, Orbenin)
+- Insert tube after milking
+- Milk affected quarter completely first
+Prevention:
+- Clean milking hands and equipment
+- Dip teats in disinfectant after milking
+- Dry cow therapy at end of lactation
+
+=== GOAT AND SHEEP DISEASES ===
+
+1. CONTAGIOUS CAPRINE PLEUROPNEUMONIA (CCPP) - MOST IMPORTANT
+Cause: Mycoplasma capricolum bacteria
+Symptoms:
+- Coughing, difficulty breathing
+- Fever, nasal discharge
+- Animal stands apart from herd
+- High mortality if untreated
+Treatment:
+- Oxytetracycline injection early
+- Tylosin injection also effective
+Prevention:
+- Vaccination every year
+- Quarantine new animals for 3 weeks before mixing
+
+2. PPR (Peste des Petits Ruminants / Sotoka ya Mbuzi)
+Cause: Morbillivirus - similar to cattle rinderpest
+Symptoms:
+- High fever, depression
+- Discharge from eyes and nose
+- Sores in mouth, diarrhea
+- Deaths in 5-10 days
+Treatment:
+- No cure - supportive treatment
+- Antibiotics to prevent secondary infection
+Prevention:
+- Vaccination every 3 years (provides long immunity)
+
+3. MANGE (Upele)
+Cause: Sarcoptes scabiei mites
+Symptoms:
+- Intense scratching
+- Hair/wool loss starting from face, ears, legs
+- Thick crusty skin
+Treatment:
+- Ivermectin injection (0.2mg/kg) OR
+- Dipping in Diazinon/Amitraz solution
+- Repeat after 14 days
+Prevention:
+- Quarantine new animals
+- Dip regularly
+
+4. INTESTINAL WORMS (Minyoo)
+Cause: Various helminths (roundworms, tapeworms)
+Symptoms:
+- Weight loss despite eating
+- Bottle jaw (fluid under chin)
+- Pale gums (anemia)
+- Pot belly in young animals
+Treatment:
+- Albendazole (Valbazen): 7.5mg/kg
+- Ivermectin: also controls external parasites
+- Fenbendazole (Panacur)
+Prevention:
+- Deworm every 3 months
+- Rotate grazing areas
+- Check FAMACHA eye score to decide when to deworm
+
+=== POULTRY DISEASES ===
+
+1. NEWCASTLE DISEASE (Mdondo) - MOST IMPORTANT
+Cause: Paramyxovirus
+Symptoms:
+- Twisted neck, circling
+- Gasping, rattling breathing
+- Green watery diarrhea
+- Sudden deaths in large numbers
+Treatment:
+- NO TREATMENT - vaccination ONLY prevents it
+- Cull infected birds humanely
+- Do NOT eat sick birds
+Prevention:
+- Vaccine every 3 months (I-2 thermostable vaccine)
+- Can give via eye drop, drinking water, or spray
+- Cheap: around KSh 50-100 for 100-dose vial
+- MOST IMPORTANT VACCINE FOR KENYAN FARMERS
+
+2. GUMBORO DISEASE (Infectious Bursal Disease - IBD)
+Cause: Birnavirus
+Affects: Chicks 3-6 weeks old
+Symptoms:
+- Ruffled feathers, droopiness
+- White watery diarrhea
+- Chicks peck at their own vent
+Treatment:
+- No treatment - supportive care (vitamins, electrolytes)
+Prevention:
+- Vaccine at day 14 and day 21 of life
+
+3. FOWL TYPHOID & SALMONELLA
+Cause: Salmonella gallinarum bacteria
+Symptoms:
+- Yellow-green diarrhea
+- Sudden deaths especially in young birds
+- Pale combs and wattles
+Treatment:
+- Enrofloxacin (Baytril) in water for 5 days
+Prevention:
+- Fowl Typhoid vaccine
+- Keep feeders and drinkers clean
+- Rodent control (rats spread Salmonella)
+
+4. COCCIDIOSIS
+Cause: Eimeria protozoa
+Affects: Chicks 3-8 weeks
+Symptoms:
+- Bloody diarrhea
+- Huddling, ruffled feathers
+- High mortality in young chicks
+Treatment:
+- Amprolium (Coxitabs) in water
+- Sulphonamides
+Prevention:
+- Coccidiostats in feed
+- Dry clean litter
+- Do not overcrowd
+
+5. FOWL POX
+Cause: Avipoxvirus
+Symptoms:
+- Wart-like scabs on comb, wattles, face (dry form)
+- Yellow lesions in mouth and throat (wet form)
+Treatment:
+- No treatment for virus
+- Iodine on scabs to prevent secondary infection
+Prevention:
+- Fowl Pox vaccine at 6-8 weeks
+
+=== VACCINATION SCHEDULE SUMMARY ===
+
+CATTLE:
+- FMD: Every 6 months
+- Anthrax: Every year (April-May)
+- Blackquarter: Every year
+- CBPP: Every year
+- ECF: Once in lifetime (ITM method)
+- Brucellosis: Females once at 3-8 months
+
+GOATS/SHEEP:
+- PPR: Every 3 years
+- CCPP: Every year
+- Anthrax: Every year in endemic areas
+
+POULTRY:
+- Newcastle Disease: Day 1 (day-old chick), week 3, then every 3 months
+- Gumboro: Day 14 and Day 21
+- Fowl Typhoid: Week 6
+
+=== SIGNS OF HEALTHY LIVESTOCK ===
+CATTLE:
+- Alert and curious
+- Normal temperature 38-39.5°C
+- Bright eyes, moist nose
+- Shiny coat
+- Eating and ruminating
+- Normal dung (firm, not runny)
+- Producing normal milk
+
+CHICKENS:
+- Active, scratching and foraging
+- Bright red comb and wattles
+- Clear eyes
+- Eating and drinking normally
+- Firm droppings (white with dark center)
+
+=== EMERGENCY CONTACTS ===
+Report disease outbreaks to:
+- Your local vet officer at sub-county office
+- DVS Headquarters Nairobi: 020-2718870
+- KALRO: 0722-206986

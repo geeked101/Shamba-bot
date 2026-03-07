@@ -1,0 +1,37 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+# Web framework
+fastapi
+uvicorn
+python-multipart
+python-dotenv
+
+# LangChain - pinned compatible versions
+langchain==0.3.7
+langchain-community==0.3.7
+langchain-core==0.3.19
+langchain-text-splitters==0.3.2
+
+# Vector DB
+chromadb-client
+
+# LLM
+groq
+
+# Embeddings - NO sentence-transformers, NO torch needed (we use HF API)
+huggingface_hub==0.26.2
+
+# Database
+psycopg2-binary
+
+# Speech
+openai-whisper
+torch==2.2.2+cpu
+numpy<2
+
+# PDF ingestion
+pymupdf
+pdfplumber
+
+# SMS
+africastalking
