@@ -31,20 +31,36 @@ from langchain_core.documents import Document
 
 load_dotenv()
 
-CHROMA_HOST     = os.getenv("CHROMA_HOST", "chromadb")
-CHROMA_PORT     = int(os.getenv("CHROMA_PORT", 8000))
-CHROMA_DIR      = "/app/chroma_data"
-COLLECTION_NAME = os.getenv("CHROMA_COLLECTION", "shamba_rag")
-EMBEDDING_MODEL = "intfloat/multilingual-e5-large"
+#  ChromaDB config
+CHROMA_SERVER_MODE = os.getenv("CHROMA_SERVER_MODE", "http") # 'http' or 'persistent'
+CHROMA_HOST        = os.getenv("CHROMA_HOST", "chromadb")
+CHROMA_PORT        = int(os.getenv("CHROMA_PORT", 8000))
+CHROMA_DIR         = os.getenv("CHROMA_DIR", "./chroma_data")
+COLLECTION_NAME    = os.getenv("CHROMA_COLLECTION", "shamba_rag")
+
 HF_API_KEY      = os.getenv("HF_API_KEY")
+EMBEDDING_MODEL = "intfloat/multilingual-e5-large"
 CHUNK_SIZE      = 500
 CHUNK_OVERLAP   = 50
 
+#  Vector DB Toggle
+VECTOR_STORE_TYPE = os.getenv("VECTOR_STORE_TYPE", "chroma")
+PINECONE_API_KEY  = os.getenv("PINECONE_API_KEY")
+PINECONE_INDEX    = os.getenv("PINECONE_INDEX_NAME", "shamba-ai")
+
 DATA_DIRS = {
-    "sw": "/app/data/swahili",
-    "ki": "/app/data/kikuyu",
-    "en": "/app/data/pdfs",      # PDFs are mostly English but serve all languages
+    "sw": os.path.join(os.path.dirname(__file__), "data", "swahili"),
+    "ki": os.path.join(os.path.dirname(__file__), "data", "kikuyu"),
+    "en": os.path.join(os.path.dirname(__file__), "data", "pdfs"),
 }
+
+# If running locally in the root folder, try fallback
+if not os.path.exists(DATA_DIRS["sw"]):
+    DATA_DIRS = {
+        "sw": "Data/swahili",
+        "ki": "Data/kikuyu",
+        "en": "Data/pdfs",
+    }
 
 #  Seed data (used when no files are found) 
 SEED_DOCS = [
@@ -173,10 +189,14 @@ def load_pdf_files(folder: str) -> list[Document]:
 
 
 def ingest(force: bool = False):
-    # Check if already ingested
-    if not force:
+    # Check if already ingested (only for Chroma)
+    if not force and VECTOR_STORE_TYPE == "chroma":
         try:
-            client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
+            if CHROMA_SERVER_MODE == "persistent":
+                client = chromadb.PersistentClient(path=CHROMA_DIR)
+            else:
+                client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
+                
             collection = client.get_collection(COLLECTION_NAME)
             if collection.count() > 0:
                 print(f"   Collection already has {collection.count()} vectors. Skipping ingest.")
@@ -222,57 +242,60 @@ def ingest(force: bool = False):
         all_docs = splitter.split_documents(all_docs)
 
     print(f"\n   Total chunks to embed: {len(all_docs)}")
-    print("  Embedding and storing in batches (this may take a few minutes)...")
+    print("  Embedding and storing (this may take a few minutes)...")
 
-    import time
     import uuid
 
-    BATCH_SIZE = 32
-    client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
-    collection = client.get_or_create_collection(COLLECTION_NAME)
+    if VECTOR_STORE_TYPE == "pinecone" and PINECONE_API_KEY:
+        from langchain_pinecone import PineconeVectorStore
+        print(f"    Target: Pinecone Index '{PINECONE_INDEX}'")
+        PineconeVectorStore.from_documents(
+            all_docs,
+            embeddings,
+            index_name=PINECONE_INDEX,
+            pinecone_api_key=PINECONE_API_KEY
+        )
+        print(f"   {len(all_docs)} chunks stored in Pinecone")
+    else:
+        if CHROMA_SERVER_MODE == "persistent":
+            print(f"    Target: Local ChromaDB (Persistent) at {CHROMA_DIR}")
+            client = chromadb.PersistentClient(path=CHROMA_DIR)
+        else:
+            print(f"    Target: Remote ChromaDB (HTTP) at {CHROMA_HOST}")
+            client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
+            
+        collection = client.get_or_create_collection(COLLECTION_NAME)
 
-    for i in range(0, len(all_docs), BATCH_SIZE):
-        batch = all_docs[i:i+BATCH_SIZE]
-        print(f"    Processing batch {i//BATCH_SIZE + 1}/{(len(all_docs) + BATCH_SIZE - 1)//BATCH_SIZE}...")
-        texts = [doc.page_content for doc in batch]
-        metadatas = [doc.metadata for doc in batch]
-        ids = [str(uuid.uuid4()) for _ in batch]
+        BATCH_SIZE = 32
+        for i in range(0, len(all_docs), BATCH_SIZE):
+            batch = all_docs[i:i+BATCH_SIZE]
+            print(f"    Processing batch {i//BATCH_SIZE + 1}/{(len(all_docs) + BATCH_SIZE - 1)//BATCH_SIZE}...")
+            texts = [doc.page_content for doc in batch]
+            metadatas = [doc.metadata for doc in batch]
+            ids = [str(uuid.uuid4()) for _ in batch]
 
-        success = False
-        for attempt in range(10):
-            try:
-                out = embeddings.embed_documents(texts)
-                if isinstance(out, dict) and "error" in out:
-                    wait_time = out.get("estimated_time", 15)
-                    print(f"       HF API Error: {out['error']}. Waiting {wait_time}s...")
-                    time.sleep(wait_time)
-                    continue
-                if isinstance(out, list) and len(out) > 0 and isinstance(out[0], dict) and "error" in out[0]:
-                    print(f"       HF API Error in list format. Retrying...")
+            success = False
+            for attempt in range(10):
+                try:
+                    out = embeddings.embed_documents(texts)
+                    collection.add(
+                        documents=texts,
+                        embeddings=out,
+                        metadatas=metadatas,
+                        ids=ids
+                    )
+                    success = True
+                    break
+                except Exception as e:
+                    print(f"       Error during batch embedding: {e}. Retrying...")
+                    import time
                     time.sleep(15)
-                    continue
-                if not isinstance(out, list):
-                    print(f"       Unexpected API response: type {type(out)}. Retrying...")
-                    time.sleep(15)
-                    continue
-                
-                collection.add(
-                    documents=texts,
-                    embeddings=out,
-                    metadatas=metadatas,
-                    ids=ids
-                )
-                success = True
-                break
-            except Exception as e:
-                print(f"       Error during batch embedding: {e}")
-                time.sleep(15)
-        
-        if not success:
-            print("       Failed to embed batch after multiple attempts.")
-            sys.exit(1)
+            
+            if not success:
+                print("       Failed to embed batch.")
+                sys.exit(1)
 
-    print(f"   {len(all_docs)} chunks stored in ChromaDB\n")
+        print(f"   {len(all_docs)} chunks stored in ChromaDB\n")
 
 
 if __name__ == "__main__":

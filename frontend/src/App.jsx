@@ -6,6 +6,9 @@ import VoiceInput from "./components/VoiceInput";
 import TopicQuickSelect from "./components/TopicQuickSelect";
 import axios from "axios";
 
+// If you deploy to Render, this would be https://your-backend-url.onrender.com
+const API_BASE_URL = process.env.REACT_APP_API_URL || "";
+
 const COLORS = {
     green: "#2d7a3a",
     lightGreen: "#e8f5e9",
@@ -47,7 +50,7 @@ export default function App() {
             formData.append("language", language);
             formData.append("session_id", sessionId);
 
-            const res = await axios.post("/text-query", formData);
+            const res = await axios.post(`${API_BASE_URL}/text-query`, formData);
             setMessages(prev => [...prev, {
                 role: "assistant",
                 content: res.data.answer,
@@ -74,7 +77,7 @@ export default function App() {
     const handleClearChat = async () => {
         const formData = new FormData();
         formData.append("session_id", sessionId);
-        await axios.post("/clear-history", formData);
+        await axios.post(`${API_BASE_URL}/clear-history`, formData);
         const greetings = {
             sw: "Mazungumzo yameanzishwa upya. Ninaweza kukusaidia na nini?",
             ki: "Maũndũ mautharathaitwo. Nĩngũkũteithia na kĩ?"

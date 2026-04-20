@@ -30,7 +30,7 @@ htmlcov/
 # ===========================
 # Vector DB & Data
 # ===========================
-vectordb/chroma_data/
+
 # Assume Data directory holds static source PDFs/TXTs so we don't ignore it completely,
 # but we might ignore temporary processing files
 Data/.DS_Store

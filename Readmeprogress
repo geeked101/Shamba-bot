@@ -1,0 +1,17 @@
+
+Deployment Guide
+
+💡 Critical Recommendation for Free Hosting
+Since most free-tier platforms (like Render) have ephemeral file systems (your files are wiped every time the server restarts), you should:
+
+Commit your data: Run your ingestion script locally to generate the chroma_data folder.
+Upload to GitHub: Include the chroma_data folder in your Git repository. This ensures your knowledge base is "baked into" your deployment and doesn't disappear.
+Deployment Checklist:
+
+ Sign up for Neon.tech and get your PostgreSQL connection string.
+ Push your code to GitHub (including the pre-indexed chroma_data if applicable).
+ Connect your repo to Render (Backend) and Vercel (Frontend).
+ Add your .env variables to their respective dashboards.
+Would you like help with anything else, like setting up the deployment scripts or troubleshooting the database connection?
+
+2

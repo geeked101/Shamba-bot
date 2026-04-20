@@ -18,17 +18,25 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-#  Config 
-CHROMA_HOST     = os.getenv("CHROMA_HOST", "chromadb")
-CHROMA_PORT     = int(os.getenv("CHROMA_PORT", 8000))
-CHROMA_DIR      = "/app/chroma_data"
-COLLECTION_NAME = os.getenv("CHROMA_COLLECTION", "shamba_rag")
+#  ChromaDB config
+CHROMA_SERVER_MODE = os.getenv("CHROMA_SERVER_MODE", "http") # 'http' or 'persistent'
+CHROMA_HOST        = os.getenv("CHROMA_HOST", "chromadb")
+CHROMA_PORT        = int(os.getenv("CHROMA_PORT", 8000))
+CHROMA_DIR         = os.getenv("CHROMA_DIR", "/app/chroma_data")
+COLLECTION_NAME    = os.getenv("CHROMA_COLLECTION", "shamba_rag")
 
+#  PostgreSQL config 
 PG_HOST         = os.getenv("POSTGRES_HOST", "postgres")
 PG_PORT         = os.getenv("POSTGRES_PORT", "5432")
 PG_USER         = os.getenv("POSTGRES_USER", "postgres")
 PG_PASSWORD     = os.getenv("POSTGRES_PASSWORD", "password")
 PG_DB           = os.getenv("POSTGRES_DB", "shambadb")
+PG_SSL          = os.getenv("POSTGRES_SSL", "require") # Neon requires SSL
+
+#  Vector DB Toggle
+VECTOR_STORE_TYPE = os.getenv("VECTOR_STORE_TYPE", "chroma") # 'chroma' or 'pinecone'
+PINECONE_API_KEY  = os.getenv("PINECONE_API_KEY")
+PINECONE_INDEX    = os.getenv("PINECONE_INDEX_NAME", "shamba-ai")
 
 GROQ_API_KEY    = os.getenv("GROQ_API_KEY")
 HF_API_KEY      = os.getenv("HF_API_KEY")
@@ -43,12 +51,28 @@ embeddings = HuggingFaceInferenceAPIEmbeddings(
     api_url="https://router.huggingface.co/hf-inference/models/intfloat/multilingual-e5-large"
 )
 
-vectorstore = Chroma(
-    persist_directory=CHROMA_DIR,
-    embedding_function=embeddings,
-    collection_name=COLLECTION_NAME,
-    client=chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
-)
+if VECTOR_STORE_TYPE == "pinecone" and PINECONE_API_KEY:
+    from langchain_pinecone import PineconeVectorStore
+    print("Initializing Pinecone vector store...")
+    vectorstore = PineconeVectorStore(
+        index_name=PINECONE_INDEX,
+        embedding=embeddings,
+        pinecone_api_key=PINECONE_API_KEY
+    )
+else:
+    if CHROMA_SERVER_MODE == "persistent":
+        print(f"Initializing ChromaDB in PERSISTENT mode at {CHROMA_DIR}...")
+        chroma_client = chromadb.PersistentClient(path=CHROMA_DIR)
+    else:
+        print(f"Initializing ChromaDB in HTTP mode ({CHROMA_HOST}:{CHROMA_PORT})...")
+        chroma_client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
+
+    vectorstore = Chroma(
+        persist_directory=CHROMA_DIR,
+        embedding_function=embeddings,
+        collection_name=COLLECTION_NAME,
+        client=chroma_client
+    )
 
 #  System prompts 
 SYSTEM_PROMPTS = {
@@ -130,10 +154,12 @@ def is_greeting(text: str, language: str) -> bool:
 
 #  PostgreSQL helpers 
 def _pg_conn():
+    # SSL is usually required for cloud DBs like Neon
     return psycopg2.connect(
         host=PG_HOST, port=PG_PORT,
         user=PG_USER, password=PG_PASSWORD,
-        dbname=PG_DB
+        dbname=PG_DB,
+        sslmode=PG_SSL
     )
 
 
