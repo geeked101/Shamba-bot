@@ -27,9 +27,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 #  ChromaDB config 
-CHROMA_HOST     = os.getenv("CHROMA_HOST", "chromadb")
-CHROMA_PORT     = int(os.getenv("CHROMA_PORT", 8000))
-COLLECTION_NAME = os.getenv("CHROMA_COLLECTION", "shamba_rag")
+CHROMA_SERVER_MODE = os.getenv("CHROMA_SERVER_MODE", "http") # 'http' or 'persistent'
+CHROMA_HOST        = os.getenv("CHROMA_HOST", "chromadb")
+CHROMA_PORT        = int(os.getenv("CHROMA_PORT", 8000))
+CHROMA_DIR         = os.getenv("CHROMA_DIR", "./vectordb/chroma_data")
+COLLECTION_NAME    = os.getenv("CHROMA_COLLECTION", "shamba_rag")
 
 #  PostgreSQL config 
 PG_HOST     = os.getenv("POSTGRES_HOST", "postgres")
@@ -41,10 +43,14 @@ PG_DB       = os.getenv("POSTGRES_DB", "shambadb")
 
 #  1. ChromaDB 
 def init_chromadb(reset: bool = False):
-    print(f"  [ChromaDB] Connecting to {CHROMA_HOST}:{CHROMA_PORT}...")
     try:
-        client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
-        client.heartbeat()
+        if CHROMA_SERVER_MODE == "persistent":
+            print(f"  [ChromaDB] Connecting in PERSISTENT mode at {CHROMA_DIR}...")
+            client = chromadb.PersistentClient(path=CHROMA_DIR)
+        else:
+            print(f"  [ChromaDB] Connecting to {CHROMA_HOST}:{CHROMA_PORT}...")
+            client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
+            client.heartbeat()
         print("  [ChromaDB]  Connection healthy")
     except Exception as e:
         print(f"  [ChromaDB]  Connection failed: {e}")
