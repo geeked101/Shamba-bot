@@ -17,8 +17,7 @@ import random
 from fastapi import FastAPI, UploadFile, File, Form, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-import whisper
-from rag_pipeline import query_rag, get_history, clear_history
+from rag_pipeline import query_rag, get_history, clear_history, groq_client
 
 load_dotenv()
 
@@ -69,10 +68,9 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-# ── Whisper STT ─────────────────────────────────────────────────────
-print("Loading Whisper STT model...")
-stt_model = whisper.load_model("base")
-print("✅ Whisper ready")
+# ── Whisper STT via Groq API ─────────────────────────────────────────
+# No local loading needed, saving 300MB+ RAM!
+print("✅ Whisper ready (via Groq API)")
 
 
 # ── Helpers ─────────────────────────────────────────────────────────
@@ -193,15 +191,21 @@ async def voice_query(
     language: str = Form(default="sw"),
     session_id: str = Form(default="default")
 ):
-    whisper_lang = {"sw": "sw", "ki": None}.get(language, "sw")
     with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
         tmp.write(await audio.read())
         tmp_path = tmp.name
     try:
-        result = stt_model.transcribe(tmp_path, language=whisper_lang)
-        transcription = result["text"].strip()
+        # Use Groq Whisper API instead of local model
+        with open(tmp_path, "rb") as audio_file:
+            transcription = groq_client.audio.transcriptions.create(
+                file=(tmp_path, audio_file.read()),
+                model="whisper-large-v3",
+                language=language,
+                response_format="text",
+            )
     finally:
         os.unlink(tmp_path)
+    
     answer = query_rag(transcription, language, session_id)
     return {"transcription": transcription, "answer": answer,
             "language": language, "session_id": session_id}

@@ -26,10 +26,9 @@ huggingface_hub==0.26.2
 # Database
 psycopg2-binary
 
-# Speech
-openai-whisper
-torch==2.2.2+cpu
-numpy<2
+# Speech API (Using Groq)
+# No local torch needed for free tier
+numpy<2.1.0
 
 # PDF ingestion
 pymupdf
