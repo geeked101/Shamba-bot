@@ -13,7 +13,7 @@ langchain-core==0.3.19
 langchain-text-splitters==0.3.2
 
 # Vector DB
-chromadb-client
+chromadb
 pinecone-client
 langchain-pinecone
 
