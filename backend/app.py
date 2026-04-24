@@ -32,11 +32,11 @@ if AT_API_KEY:
         import africastalking
         africastalking.initialize(AT_USERNAME, AT_API_KEY)
         sms_service = africastalking.SMS
-        print(f"✅ Africa's Talking SMS ready (user: {AT_USERNAME})")
+        print(f"[OK] Africa's Talking SMS ready (user: {AT_USERNAME})")
     except Exception as e:
-        print(f"⚠️  Africa's Talking error: {e}")
+        print(f"[!] Africa's Talking error: {e}")
 else:
-    print("⚠️  AT_API_KEY not set — SMS disabled")
+    print("[!] AT_API_KEY not set — SMS disabled")
 
 # ── Twilio WhatsApp ─────────────────────────────────────────────────
 TWILIO_SID       = os.getenv("TWILIO_ACCOUNT_SID", "")
@@ -48,11 +48,11 @@ if TWILIO_SID and TWILIO_TOKEN:
     try:
         from twilio.rest import Client as TwilioClient
         twilio_client = TwilioClient(TWILIO_SID, TWILIO_TOKEN)
-        print(f"✅ Twilio WhatsApp ready ({TWILIO_WA_NUMBER})")
+        print(f"[OK] Twilio WhatsApp ready ({TWILIO_WA_NUMBER})")
     except Exception as e:
-        print(f"⚠️  Twilio error: {e}")
+        print(f"[!] Twilio error: {e}")
 else:
-    print("⚠️  Twilio not configured — WhatsApp disabled")
+    print("[!] Twilio not configured — WhatsApp disabled")
 
 # ── FastAPI ─────────────────────────────────────────────────────────
 app = FastAPI(
@@ -70,20 +70,38 @@ app.add_middleware(
 
 # ── Whisper STT via Groq API ─────────────────────────────────────────
 # No local loading needed, saving 300MB+ RAM!
-print("✅ Whisper ready (via Groq API)")
+print("[OK] Whisper ready (via Groq API)")
 
 
 # ── Helpers ─────────────────────────────────────────────────────────
 def detect_language(text: str) -> str:
     """Detect Kikuyu vs Swahili from message content."""
-    kikuyu_chars = set("ūīāēōũĩĀĒĪŌŪĨŨ")
+    # Special characters common in Kikuyu orthography
+    kikuyu_chars = set("üïāēōũĩŪĨŨũĩũ")
     if any(c in kikuyu_chars for c in text):
         return "ki"
-    kikuyu_words = ["nĩ", "gũkũ", "mũgũnda", "kahũa", "mbembe",
-                    "nĩngũ", "ûrĩmi", "arĩmi", "mũrĩmi"]
-    if any(w in text.lower() for w in kikuyu_words):
-        return "ki"
-    return "sw"
+        
+    kikuyu_words = {
+        "nĩ", "gũkũ", "mũgũnda", "kahũa", "mbembe", "nĩngũ", "ûrĩmi", 
+        "arĩmi", "mũrĩmi", "niatĩa", "mwega", "ũhoro", "ngwenda", "thutha",
+        "mĩrimũ", "mbolea", "tĩĩrĩ", "nyamũ", "ng'ombe", "mbuzi", "ngũkũ",
+        "kũũzĩa", "nĩ njĩra", "tigwo"
+    }
+    
+    text_lower = text.lower()
+    # Check for exact word matches or contains
+    count = 0
+    words = text_lower.split()
+    for w in words:
+        if w in kikuyu_words:
+            count += 1
+            
+    # Also check if certain phrases exist
+    for phrase in ["wĩ mwega", "ũhoro waku", "nĩ mwega"]:
+        if phrase in text_lower:
+            count += 2
+
+    return "ki" if count > 0 else "sw"
 
 
 def truncate_sms(text: str, max_chars: int = 459) -> str:
@@ -105,10 +123,10 @@ def send_sms_at(phone: str, message: str) -> bool:
         return False
     try:
         sms_service.send(message, [phone], AT_SENDER)
-        print(f"[SMS] ✅ Sent to {phone}")
+        print(f"[SMS] [OK] Sent to {phone}")
         return True
     except Exception as e:
-        print(f"[SMS] ❌ Error: {e}")
+        print(f"[SMS] [ERR] Error: {e}")
         return False
 
 
@@ -126,10 +144,10 @@ def send_whatsapp(to: str, message: str) -> bool:
             to=to,
             body=message
         )
-        print(f"[WhatsApp] ✅ Sent to {to}")
+        print(f"[WhatsApp] [OK] Sent to {to}")
         return True
     except Exception as e:
-        print(f"[WhatsApp] ❌ Error: {e}")
+        print(f"[WhatsApp] [ERR] Error: {e}")
         return False
 
 
@@ -163,12 +181,12 @@ HELP_COMMANDS  = {"help", "msaada", "ũteithio", "menu"}
 def root():
     return {
         "status": "running",
-        "bot": "Shamba AI 🌱",
+        "bot": "Shamba AI",
         "languages": ["sw", "ki"],
         "channels": {
-            "web": "✅ active",
-            "sms": "✅ active" if sms_service else "⚠️  not configured",
-            "whatsapp": "✅ active" if twilio_client else "⚠️  not configured",
+            "web": "[OK] active",
+            "sms": "[OK] active" if sms_service else "[!] not configured",
+            "whatsapp": "[OK] active" if twilio_client else "[!] not configured",
         },
         "version": "1.0.0"
     }
@@ -336,3 +354,9 @@ async def whatsapp_send_manual(
     to      = f"whatsapp:{phone}" if not phone.startswith("whatsapp:") else phone
     success = send_whatsapp(to, message)
     return {"success": success, "to": to, "message": message}
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.getenv("APP_PORT", 8000))
+    print(f"Starting Shamba AI server on port {port}...")
+    uvicorn.run(app, host="0.0.0.0", port=port)

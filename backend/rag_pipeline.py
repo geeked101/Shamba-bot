@@ -9,12 +9,14 @@ Core RAG logic using:
 """
 
 import os
+import random
 import psycopg2
 import chromadb
 from groq import Groq
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
 from dotenv import load_dotenv
+from utils import detect_location, detect_crop, get_weather, get_market_prices, get_safety_disclaimer
 
 load_dotenv()
 
@@ -76,49 +78,31 @@ else:
 
 #  System prompts 
 SYSTEM_PROMPTS = {
-    "sw": """Wewe ni Mkulima  — msaidizi wa kilimo wa AI kwa wakulima wa Kenya.
-Unajibu kwa Kiswahili tu, kwa lugha rahisi inayoeleweka.
+    "sw": """Wewe ni Mkulima — msaidizi wa kilimo wa AI kwa wakulima wa Kenya. 
 
-UTU WAKO:
-- Una moyo wa huruma na urafiki — kama jirani anayesaidia
-- Unasalimia vizuri na kujibu mazungumzo ya kawaida
-- Unajua mambo mengi lakini mada yako kuu ni kilimo
+KANUNI ZAKO:
+1. USALAMA KWANZA: Daima hamsisha wakulima kutumia dawa kwa usalama.
+2. USHAHIDI: Tumia taarifa zilizotolewa tu. Kama hujui, taja "Sina taarifa za kutosha, wasiliana na afisa wa kilimo."
+3. CITATION: Taja chanzo cha taarifa yako (mfano: "Kulingana na mwongozo wa [chanzo]...").
+4. LUGHA RAHISI: Epuka maneno magumu ya kisayansi. Ongea kama rafiki shambani.
+5. UFUPI: Toa majibu kwa njia ya nukta (bullet points) ili yaweze kusomeka haraka kwa sauti.
 
 UNASAIDIA NA:
-- Magonjwa ya mazao (mahindi, kahawa, chai, nyanya, viazi, n.k.)
-- Mbolea na lishe ya udongo
-- Misimu ya kupanda kwa kanda mbalimbali za Kenya
-- Utunzaji wa mifugo (ng'ombe, mbuzi, kuku)
-- Mazao ya biashara (kahawa, chai)
-- Hali ya hewa na kilimo
+- Magonjwa ya mazao, mbolea, misimu ya kupanda, na mifugo.
+- Hali ya hewa na bei za soko zilizopo.
 
 JINSI YA KUJIBU:
-- Salimia kwa urafiki ukisalimiwa ("Mambo" → "Poa sana! Habari za shamba?")
-- Tumia muktadha uliotolewa kama una taarifa husika
-- Kama swali lipo nje ya kilimo, jibu kwa ufupi kisha urejee kilimo
-- Kama huna jibu sahihi: "Sina taarifa za kutosha. Wasiliana na afisa wa kilimo."
-- Jibu kwa ufupi lakini kamili — pointi 3-5 ni bora kwa SMS na mazungumzo""",
+- Salimia kwa urafiki ukisalimiwa.
+- Ikiwa unajua eneo la mkulima, taja jinsi hali ya hewa inavyoweza kuathiri ushauri wako.""",
 
-    "ki": """Wee uri Mũrĩmi  — mũteithia wa ûrĩmi wa AI ũteithagĩria arĩmi a Kenya.
-Ũrĩa na Gĩkũyũ gũkũ, kwa rũrĩmĩ rũũgĩ.
+    "ki": """Wee uri Mũrĩmi — mũteithia wa ûrĩmi wa AI ũteithagĩria arĩmi a Kenya.
 
-ŪHO WAKU:
-- Ūna ngoro ya ũrĩa na ũrata — ta mũirĩtu ũteithagĩria
-- Ūcookia mĩambirĩria mĩega na kũũrĩria ûhoro wa kawaida
-- Ūĩ na ûhoro mũingi no mada yaku nĩ ûrĩmi
-
-ŨTEITHAGĨRIA NA:
-- Mĩrimũ ya mimea (mbembe, kahũa, chai, nyanya, ngwaci, na ingĩ)
-- Mbolea na ûhoro wa tĩĩrĩ
-- Ihinda rĩa gũtema mbeu kwa itũra itũndũ cia Kenya
-- Ũhoro wa nyamũ (ng'ombe, mbuzi, ngũkũ)
-- Mazao ya kũũzĩa (kahũa, chai)
-
-NĨATĨA ŨRĨAGA:
-- Cookia mĩambirĩria mĩega ûsalimiagwo ("Mambo" → "Nĩ mwega! Ûhoro wa mũgũnda?")
-- Tumia muktadha ûrĩa ûtũmĩire kama ūna ûhoro ũũgĩ
-- Kama ûtarĩ na ûhoro: "Ndĩrathime ûhoro ûyũ. Hoya afisa wa ûrĩmi."
-- Cookia na ngoro nini no ûhoro mũno — pointi ĩtatũ na ĩnya nĩ njega""",
+Watho Waku:
+1. ŨGITIRI: Hinda ciothe teithia arĩmi kũmenya kũhũthĩra ndawa na njĩra ya ũgitĩri.
+2. ŨMA: Tumia ûhoro ũrĩa ũheetwo tu. Kama ûtarĩ na ûhoro: "Ndĩrathime ûhoro ûyũ. Hoya afisa wa ûrĩmi."
+3. CITATION: Taũra kũrĩa ũhoro ũyũ ũmoimire (mfano: "Kũringana na mwongozo wa [chanzo]...").
+4. RŨRĨMĨ RŨTEITHIA: Tũmĩra rũrĩmĩ rũhũthũ. Aria ta mũrata mũgũnda-inĩ.
+5. KĨHUI: Cookia na njĩra ya nukta nĩguo ûhoro ũmenyeke na mĩtũkĩ.""",
 }
 
 #  Greeting detection 
@@ -139,29 +123,25 @@ GREETING_RESPONSES = {
     ],
 }
 
-import random
-
 def is_greeting(text: str, language: str) -> bool:
     text_lower = text.lower().strip()
     greets = GREETINGS.get(language, GREETINGS["sw"])
-    # Check if the entire message is just a greeting
     if len(text_lower) < 20:
         for g in greets:
             if g in text_lower:
                 return True
     return False
 
-
 #  PostgreSQL helpers 
 def _pg_conn():
-    # SSL is usually required for cloud DBs like Neon
+    if PG_HOST.startswith("postgresql://") or PG_HOST.startswith("postgres://"):
+        return psycopg2.connect(PG_HOST)
     return psycopg2.connect(
         host=PG_HOST, port=PG_PORT,
         user=PG_USER, password=PG_PASSWORD,
         dbname=PG_DB,
         sslmode=PG_SSL
     )
-
 
 def get_history(session_id: str, limit: int = 20) -> list[dict]:
     try:
@@ -181,7 +161,6 @@ def get_history(session_id: str, limit: int = 20) -> list[dict]:
         print(f"[DB] get_history error: {e}")
         return []
 
-
 def save_message(session_id: str, role: str, content: str, language: str):
     try:
         conn = _pg_conn()
@@ -196,7 +175,6 @@ def save_message(session_id: str, role: str, content: str, language: str):
     except Exception as e:
         print(f"[DB] save_message error: {e}")
 
-
 def clear_history(session_id: str):
     try:
         conn = _pg_conn()
@@ -208,11 +186,9 @@ def clear_history(session_id: str):
     except Exception as e:
         print(f"[DB] clear_history error: {e}")
 
-
 #  RAG query 
 def query_rag(question: str, language: str = "sw", session_id: str = "default") -> str:
-
-    # Handle greetings immediately without hitting RAG
+    # Handle greetings
     if is_greeting(question, language):
         responses = GREETING_RESPONSES.get(language, GREETING_RESPONSES["sw"])
         answer = random.choice(responses)
@@ -220,48 +196,67 @@ def query_rag(question: str, language: str = "sw", session_id: str = "default") 
         save_message(session_id, "assistant", answer, language)
         return answer
 
-    # 1. Retrieve relevant chunks from ChromaDB
+    # Detect context
+    location = detect_location(question)
+    crop = detect_crop(question)
+    
+    context_extras = []
+    if location:
+        weather_info = get_weather(location)
+        context_extras.append(f"Hali ya hewa {location}: {weather_info}")
+    if crop:
+        market_info = get_market_prices(crop)
+        context_extras.append(f"Bei ya soko ya {crop}: {market_info}")
+
+    # 1. Retrieve relevant chunks
     try:
-        docs = vectorstore.similarity_search(question, k=3)
-        context = "\n\n".join([
-            f"[{doc.metadata.get('topic', 'kilimo')}]\n{doc.page_content}"
-            for doc in docs
-        ]) if docs else ""
+        docs = vectorstore.similarity_search(question, k=4)
+        context_parts = []
+        for doc in docs:
+            source = doc.metadata.get('source', 'maktaba ya kilimo')
+            context_parts.append(f"[Chanzo: {source}]\n{doc.page_content}")
+        context = "\n\n".join(context_parts)
     except Exception as e:
         print(f"[RAG] Vector search error: {e}")
         context = ""
 
-    # 2. Load conversation history from PostgreSQL
+    # 2. Load history
     history = get_history(session_id)
 
     # 3. Build messages
-    system = SYSTEM_PROMPTS.get(language, SYSTEM_PROMPTS["sw"])
+    system_base = SYSTEM_PROMPTS.get(language, SYSTEM_PROMPTS["sw"])
+    if context_extras:
+        extra_prompt = "\nTaarifa za ziada za hivi sasa:\n" + "\n".join(context_extras)
+        system = system_base + extra_prompt
+    else:
+        system = system_base
 
     if context:
-        user_message = f"Taarifa kutoka maktaba ya kilimo:\n{context}\n\nSwali la mkulima: {question}"
+        user_message = f"MAKTABA YA KILIMO:\n{context}\n\nSWALI LA MKULIMA: {question}"
     else:
         user_message = question
 
     messages = history + [{"role": "user", "content": user_message}]
 
-    # 4. Call Groq with error handling
+    # 4. Call Groq
     try:
         response = groq_client.chat.completions.create(
             model=GROQ_MODEL,
             messages=[{"role": "system", "content": system}] + messages,
             max_tokens=1024,
-            temperature=0.4
+            temperature=0.3
         )
         answer = response.choices[0].message.content
-
     except Exception as e:
         print(f"[RAG] Groq error: {e}")
-        answer = {
-            "sw": "Samahani, seva yangu ina tatizo kidogo sasa hivi. Tafadhali jaribu tena baada ya dakika moja. ",
-            "ki": "Ngũngũrũka, seva nĩĩna ûguo mũnini. Ûgerie rĩngĩ thutha wa dakika imwe. "
-        }.get(language, "Samahani, jaribu tena.")
+        answer = "Samahani, jaribu tena."
 
-    # 5. Save to PostgreSQL
+    # Safety disclaimer
+    safety_keywords = ["dawa", "pesticide", "fungicide", "mbolea", "ndawa"]
+    if any(k in question.lower() for k in safety_keywords):
+        answer += get_safety_disclaimer(language)
+
+    # 5. Save
     save_message(session_id, "user", question, language)
     save_message(session_id, "assistant", answer, language)
 

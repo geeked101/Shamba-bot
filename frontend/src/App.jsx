@@ -5,26 +5,16 @@ import ChatBox from "./components/ChatBox";
 import VoiceInput from "./components/VoiceInput";
 import TopicQuickSelect from "./components/TopicQuickSelect";
 import axios from "axios";
+import "./App.css"; // Premium Styles
 
-// If you deploy to Render, this would be https://your-backend-url.onrender.com
 const API_BASE_URL = process.env.REACT_APP_API_URL || "";
-
-const COLORS = {
-    green: "#2d7a3a",
-    lightGreen: "#e8f5e9",
-    white: "#ffffff",
-    gray: "#f5f5f5",
-    textDark: "#1a1a1a",
-    textMid: "#555",
-};
 
 export default function App() {
     const [language, setLanguage] = useState("sw");
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [sessionId] = useState(() => uuidv4()); // unique per browser session
+    const [sessionId] = useState(() => uuidv4());
 
-    // Greeting message on load
     useEffect(() => {
         const greetings = {
             sw: "Habari! Mimi ni Mkulima, Msaidizi wako wa kilimo. Ninaweza kukusaidia na magonjwa ya mazao, mbolea, misimu ya kupanda, na utunzaji wa mifugo. Unahitaji msaada gani leo?",
@@ -86,90 +76,56 @@ export default function App() {
     };
 
     return (
-        <div style={{
-            minHeight: "100vh",
-            background: COLORS.gray,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            fontFamily: "'Segoe UI', sans-serif"
-        }}>
+        <div className="app-container">
             {/* Header */}
-            <div style={{
-                width: "100%",
-                background: COLORS.green,
-                padding: "12px 24px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.2)"
-            }}>
-                <BotAvatar language={language} />
+            <header className="header">
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <BotAvatar language={language} />
+                    <h1 style={{ color: "white", fontSize: "1.25rem", margin: 0, fontWeight: 700 }}>Shamba AI</h1>
+                </div>
 
-                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                    {/* Language Toggle */}
+                <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
                     {["sw", "ki"].map(lang => (
                         <button
                             key={lang}
                             onClick={() => setLanguage(lang)}
-                            style={{
-                                padding: "6px 14px",
-                                background: language === lang ? "#fff" : "transparent",
-                                color: language === lang ? COLORS.green : "#fff",
-                                border: "2px solid #fff",
-                                borderRadius: 20,
-                                cursor: "pointer",
-                                fontWeight: "bold",
-                                fontSize: 13
-                            }}
+                            className={`lang-btn ${language === lang ? 'active' : ''}`}
                         >
                             {lang === "sw" ? "Swahili" : "Kikuyu"}
                         </button>
                     ))}
 
-                    {/* Clear Chat */}
-                    <button
-                        onClick={handleClearChat}
-                        style={{
-                            padding: "6px 12px",
-                            background: "transparent",
-                            color: "#fff",
-                            border: "1px solid rgba(255,255,255,0.5)",
-                            borderRadius: 20,
-                            cursor: "pointer",
-                            fontSize: 12
-                        }}
-                    >
+                    <button onClick={handleClearChat} className="lang-btn" style={{ fontSize: '0.8rem', opacity: 0.8 }}>
                         {language === "sw" ? "Anza Upya" : "Anza Rĩngĩ"}
                     </button>
                 </div>
-            </div>
+            </header>
 
             {/* Main Chat Area */}
-            <div style={{
-                width: "100%",
-                maxWidth: 700,
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                padding: "0 16px"
-            }}>
+            <main className="chat-wrapper">
+                <div className="glass-card" style={{ flex: 1, padding: "1rem" }}>
+                    {/* Quick Topic Buttons */}
+                    <TopicQuickSelect language={language} onSelect={sendMessage} />
 
-                {/* Quick Topic Buttons */}
-                <TopicQuickSelect language={language} onSelect={sendMessage} />
+                    {/* Chat Messages */}
+                    <ChatBox messages={messages} loading={loading} language={language} />
+                </div>
 
-                {/* Chat Messages */}
-                <ChatBox messages={messages} loading={loading} language={language} />
-
-                {/* Voice + Text Input */}
-                <VoiceInput
-                    language={language}
-                    onSend={sendMessage}
-                    onVoiceResult={handleVoiceResult}
-                    loading={loading}
-                    sessionId={sessionId}
-                />
-            </div>
+                {/* Voice + Text Input - Fixed at bottom of wrapper */}
+                <div className="glass-card" style={{ padding: "10px" }}>
+                    <VoiceInput
+                        language={language}
+                        onSend={sendMessage}
+                        onVoiceResult={handleVoiceResult}
+                        loading={loading}
+                        sessionId={sessionId}
+                    />
+                </div>
+                
+                <footer style={{ textAlign: 'center', fontSize: '0.8rem', color: '#94a3b8', padding: '1rem' }}>
+                    © 2026 Shamba Bot — Verified Agricultural Advice
+                </footer>
+            </main>
         </div>
     );
 }

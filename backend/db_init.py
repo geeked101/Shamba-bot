@@ -78,13 +78,16 @@ def init_chromadb(reset: bool = False):
 def init_postgres(reset: bool = False):
     print(f"  [PostgreSQL] Connecting to {PG_HOST}:{PG_PORT}...")
     try:
-        conn = psycopg2.connect(
-            host=PG_HOST,
-            port=PG_PORT,
-            user=PG_USER,
-            password=PG_PASSWORD,
-            dbname=PG_DB
-        )
+        if PG_HOST.startswith("postgresql://") or PG_HOST.startswith("postgres://"):
+            conn = psycopg2.connect(PG_HOST)
+        else:
+            conn = psycopg2.connect(
+                host=PG_HOST,
+                port=PG_PORT,
+                user=PG_USER,
+                password=PG_PASSWORD,
+                dbname=PG_DB
+            )
         conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         cur = conn.cursor()
         print("  [PostgreSQL]  Connection healthy")

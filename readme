@@ -1,66 +1,73 @@
-# Shamba AI
+# Shamba AI (Luna) 🌱
 
-## How to Open the AI
+**Shamba AI** is a smart, multilingual agricultural assistant designed to empower farmers in Kenya with instant, reliable, and localized knowledge. By combining advanced AI with curated agricultural expertise, Shamba AI bridges the gap between farmers and critical information.
 
-1. Ensure **Docker** and **Docker Compose** are installed on your system.
-2. Clone this repository and navigate to its root directory.
-3. Copy the `.env.example` file to `.env` and configure any necessary environment variables (e.g., `HF_API_KEY`).
-4. To start all the required services (Frontend, Backend, PostgreSQL, and ChromaDB), run the following command:
-   ```bash
-   docker-compose up --build
-   ```
-5. Once the containers are fully started, open your web browser and navigate to:
-   **[http://localhost:3000](http://localhost:3000)** to interact with the Shamba AI.
+---
 
-## Project Structure
-shamba-ai/
-│
-├── .env
-├── .env.example
-├── .gitignore
-├── docker-compose.yml
-│
-├── backend/
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   ├── entrypoint.sh
-│   │
-│   ├── app.py                    ← FastAPI routes
-│   ├── rag_pipeline.py           ← search + LLM logic
-│   ├── db_init.py                ← create/validate ChromaDB collection
-│   ├── ingest.py                 ← load, chunk, embed all docs
-│   │
-│   └── data/
-│       ├── swahili/
-│       │   ├── mazao_magonjwa.txt       ← crop disease symptoms
-│       │   ├── msimu_wa_kupanda.txt     ← planting seasons
-│       │   ├── mbolea_kenya.txt         ← fertilizer recommendations
-│       │   └── mifugo.txt               ← livestock care
-│       │
-│       ├── kikuyu/
-│       │   ├── mirimu_ya_mimea.txt      ← crop diseases in Kikuyu
-│       │   ├── mbeu_na_mbura.txt        ← seeds and rainfall
-│       │   └── thaara_ya_ngombe.txt     ← cattle care
-│       │
-│       └── pdfs/                        ← Ministry of Ag, FAO docs
-│           ├── kenya_fertilizer_guide.pdf
-│           ├── fao_maize_guide.pdf
-│           ├── coffee_farming_manual.pdf
-│           ├── tea_farming_manual.pdf
-│           └── crop_disease_kenya.pdf
-│
-├── frontend/
-│   ├── Dockerfile
-│   ├── package.json
-│   └── src/
-│       ├── index.js
-│       ├── App.jsx
-│       └── components/
-│           ├── ChatBox.jsx              ← conversation thread UI
-│           ├── VoiceInput.jsx           ← mic + text input bar
-│           ├── MessageBubble.jsx        ← individual chat message
-│           ├── BotAvatar.jsx            ← Mkulima bot identity
-│           └── TopicQuickSelect.jsx     ← quick buttons for common topics
-│
-└── vectordb/
-    └── chroma_data/
+## 🚀 Key Features
+
+- **Retrieval-Augmented Generation (RAG)**: Anchored in verified knowledge bases with **mandatory source citation** (KALRO/KARI).
+- **Context-Aware Guidance**: Automatically detects **Location (Counties/Towns)** and **Crops** to tailor advice.
+- **Practical Intelligence**: Integrated **Weather forecasts** and **Market commodity prices** for Kenyan staples.
+- **Trust & Safety**: Built-in **Safe Dosage Guardrails** and disclaimer layers for all chemical advice.
+- **Premium UI/UX**: Stunning **Glassmorphism web interface** with smooth animations and voice-first design.
+- **Multilingual Support**: Fully fluent in **Swahili**, **Kikuyu**, and **English**, with automatic language detection.
+- **Omni-channel Access**:
+  - 🌐 **Web Dashboard**: Modern, responsive interface.
+  - 📱 **SMS (Africa's Talking)**: Low-bandwidth accessibility.
+  - 💬 **WhatsApp (Twilio)**: Real-time messaging with image support placeholders.
+- **Voice Intelligence**: Send voice notes in Swahili or Kikuyu; processed using the **Groq Whisper API**.
+
+---
+
+## 🛠️ The Tech Stack
+
+### AI & Data
+- **LLM**: Llama-3.3-70b (via [Groq](https://groq.com/)) for blazing-fast inference.
+- **Embeddings**: HuggingFace `multilingual-e5-large`.
+- **Vector Store**: [ChromaDB](https://www.trychroma.com/) (Persistent Local Mode).
+- **Relational DB**: [PostgreSQL (Neon.tech)](https://neon.tech/) for managed chat history.
+- **STT**: Groq Distil-Whisper for low-latency speech-to-text.
+
+### Development & Hosting
+- **Backend**: Python / [FastAPI](https://fastapi.tiangolo.com/)
+- **Frontend**: [React](https://reactjs.org/)
+- **Deployment**: [Render](https://render.com/) (Backend) & [Vercel](https://vercel.com/) (Frontend).
+
+---
+
+## 🧠 How it Works
+
+1. **Ingest**: Agricultural manuals (PDF/TXT) are processed, chunked, and stored as vectors in ChromaDB.
+2. **Query**: When a farmer asks a question, the system retrieves the most relevant knowledge "chunks."
+3. **Reason**: The retrieved text, conversation history, and user's question are sent to the Llama 3 model.
+4. **Respond**: The AI generates a culturally nuanced response in the farmer's native tongue.
+
+---
+
+## 📖 Local Setup & Development
+
+### Prerequisites
+- Python 3.11+
+- Node.js & npm
+
+### Backend Setup
+1. `cd backend`
+2. `pip install -r requirements.txt`
+3. Set your variables in a `.env` file (see `.env.example`).
+4. Run the ingestion: `python ingest.py`
+5. Start the server: `python app.py`
+
+### Frontend Setup
+1. `cd frontend`
+2. `npm install`
+3. `npm start`
+
+---
+
+## 🌍 Impact
+Shamba AI is built to tackle food security by providing 24/7 expert agricultural guidance to those who need it most, in the languages they speak best.
+
+---
+
+*Developed with ❤️ for the farmers of Kenya.*

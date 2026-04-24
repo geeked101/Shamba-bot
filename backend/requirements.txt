@@ -14,8 +14,8 @@ langchain-text-splitters==0.3.2
 
 # Vector DB
 chromadb
-pinecone-client
-langchain-pinecone
+# pinecone-client
+# langchain-pinecone
 
 # LLM
 groq
@@ -28,7 +28,7 @@ psycopg2-binary
 
 # Speech API (Using Groq)
 # No local torch needed for free tier
-numpy<2.1.0
+numpy
 
 # PDF ingestion
 pymupdf
