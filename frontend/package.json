@@ -8,9 +8,15 @@
     "axios": "^1.6.0",
     "uuid": "^9.0.0"
   },
+  "devDependencies": {
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/user-event": "^14.0.0"
+  },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
-  },
-  "proxy": "http://backend:8000"
+    "build": "react-scripts build",
+    "test": "react-scripts test --watchAll=false",
+    "test:watch": "react-scripts test"
+  }
 }

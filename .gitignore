@@ -6,6 +6,8 @@
 .env.development.local
 .env.test.local
 .env.production.local
+# Frontend local env (contains REACT_APP_API_URL for local dev)
+frontend/.env
 *.pem
 *.key
 

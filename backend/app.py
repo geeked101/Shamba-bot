@@ -11,13 +11,24 @@ Routes:
 """
 
 import os
-import tempfile
 import re
 import random
+import tempfile
+import logging
+from pathlib import Path
+import aiofiles
 from fastapi import FastAPI, UploadFile, File, Form, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from rag_pipeline import query_rag, get_history, clear_history, groq_client
+
+# ── Logging ──────────────────────────────────────────────────────────
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    datefmt="%Y-%m-%dT%H:%M:%S",
+)
+logger = logging.getLogger("shamba_ai")
 
 load_dotenv()
 
@@ -209,22 +220,39 @@ async def voice_query(
     language: str = Form(default="sw"),
     session_id: str = Form(default="default")
 ):
-    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
-        tmp.write(await audio.read())
-        tmp_path = tmp.name
+    """
+    Receive an audio upload, transcribe via Groq Whisper, then run RAG.
+    Uses async file I/O (aiofiles) and pathlib so the event loop is never
+    blocked during disk writes or reads.
+    """
+    # Determine a safe suffix from the uploaded filename
+    original_name = audio.filename or "recording.webm"
+    suffix = Path(original_name).suffix or ".webm"
+
+    # Write the upload to a temp file asynchronously
+    tmp_path = Path(tempfile.mktemp(suffix=suffix))
     try:
-        # Use Groq Whisper API instead of local model
-        with open(tmp_path, "rb") as audio_file:
-            transcription = groq_client.audio.transcriptions.create(
-                file=(tmp_path, audio_file.read()),
-                model="whisper-large-v3",
-                language=language,
-                response_format="text",
-            )
+        audio_bytes = await audio.read()
+        async with aiofiles.open(tmp_path, "wb") as tmp_file:
+            await tmp_file.write(audio_bytes)
+
+        # Read back asynchronously for the Groq API call
+        async with aiofiles.open(tmp_path, "rb") as audio_file:
+            audio_data = await audio_file.read()
+
+        logger.info("Transcribing audio: %s (%d bytes)", tmp_path.name, len(audio_data))
+        transcription = groq_client.audio.transcriptions.create(
+            file=(tmp_path.name, audio_data),
+            model="whisper-large-v3",
+            language=language,
+            response_format="text",
+        )
     finally:
-        os.unlink(tmp_path)
-    
+        if tmp_path.exists():
+            tmp_path.unlink()
+
     answer = query_rag(transcription, language, session_id)
+    logger.info("Voice query answered for session=%s", session_id)
     return {"transcription": transcription, "answer": answer,
             "language": language, "session_id": session_id}
 

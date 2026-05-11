@@ -8,6 +8,8 @@ Core RAG logic using:
   - PostgreSQL for persistent conversation history
 """
 
+import logging
+
 import os
 import random
 import psycopg2
@@ -19,6 +21,14 @@ from dotenv import load_dotenv
 from utils import detect_location, detect_crop, get_weather, get_market_prices, get_safety_disclaimer
 
 load_dotenv()
+
+# ── Logging ──────────────────────────────────────────────────────────────────
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    datefmt="%Y-%m-%dT%H:%M:%S",
+)
+logger = logging.getLogger("rag_pipeline")
 
 #  ChromaDB config
 CHROMA_SERVER_MODE = os.getenv("CHROMA_SERVER_MODE", "http") # 'http' or 'persistent'
@@ -48,6 +58,7 @@ GROQ_MODEL      = "llama-3.3-70b-versatile"
 groq_client = Groq(api_key=GROQ_API_KEY)
 
 print("Initializing HuggingFace embeddings via API...")
+logger.info("Initializing HuggingFace embeddings via API...")
 embeddings = HuggingFaceInferenceAPIEmbeddings(
     api_key=HF_API_KEY,
     api_url="https://router.huggingface.co/hf-inference/models/intfloat/multilingual-e5-large"
@@ -63,10 +74,10 @@ if VECTOR_STORE_TYPE == "pinecone" and PINECONE_API_KEY:
     )
 else:
     if CHROMA_SERVER_MODE == "persistent":
-        print(f"Initializing ChromaDB in PERSISTENT mode at {CHROMA_DIR}...")
+        logger.info("Initializing ChromaDB in PERSISTENT mode at %s", CHROMA_DIR)
         chroma_client = chromadb.PersistentClient(path=CHROMA_DIR)
     else:
-        print(f"Initializing ChromaDB in HTTP mode ({CHROMA_HOST}:{CHROMA_PORT})...")
+        logger.info("Initializing ChromaDB in HTTP mode (%s:%s)", CHROMA_HOST, CHROMA_PORT)
         chroma_client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
 
     vectorstore = Chroma(
@@ -158,7 +169,7 @@ def get_history(session_id: str, limit: int = 20) -> list[dict]:
         conn.close()
         return [{"role": row[0], "content": row[1]} for row in rows]
     except Exception as e:
-        print(f"[DB] get_history error: {e}")
+        logger.error("get_history error: %s", e)
         return []
 
 def save_message(session_id: str, role: str, content: str, language: str):
@@ -173,7 +184,7 @@ def save_message(session_id: str, role: str, content: str, language: str):
         cur.close()
         conn.close()
     except Exception as e:
-        print(f"[DB] save_message error: {e}")
+        logger.error("save_message error: %s", e)
 
 def clear_history(session_id: str):
     try:
@@ -184,7 +195,7 @@ def clear_history(session_id: str):
         cur.close()
         conn.close()
     except Exception as e:
-        print(f"[DB] clear_history error: {e}")
+        logger.error("clear_history error: %s", e)
 
 #  RAG query 
 def query_rag(question: str, language: str = "sw", session_id: str = "default") -> str:
@@ -217,7 +228,7 @@ def query_rag(question: str, language: str = "sw", session_id: str = "default") 
             context_parts.append(f"[Chanzo: {source}]\n{doc.page_content}")
         context = "\n\n".join(context_parts)
     except Exception as e:
-        print(f"[RAG] Vector search error: {e}")
+        logger.error("Vector search error: %s", e)
         context = ""
 
     # 2. Load history
@@ -248,7 +259,7 @@ def query_rag(question: str, language: str = "sw", session_id: str = "default") 
         )
         answer = response.choices[0].message.content
     except Exception as e:
-        print(f"[RAG] Groq error: {e}")
+        logger.error("Groq LLM error: %s", e)
         answer = "Samahani, jaribu tena."
 
     # Safety disclaimer

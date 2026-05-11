@@ -20,6 +20,7 @@ Run with force re-ingest:
 
 import os
 import sys
+import logging
 import argparse
 import chromadb
 from dotenv import load_dotenv
@@ -30,6 +31,14 @@ from langchain_community.document_loaders import TextLoader, PyMuPDFLoader, Dire
 from langchain_core.documents import Document
 
 load_dotenv()
+
+# ── Logging ──────────────────────────────────────────────────────────────────
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    datefmt="%Y-%m-%dT%H:%M:%S",
+)
+logger = logging.getLogger("ingest")
 
 #  ChromaDB config
 CHROMA_SERVER_MODE = os.getenv("CHROMA_SERVER_MODE", "http") # 'http' or 'persistent'
@@ -170,9 +179,9 @@ def load_pdf_files(folder: str) -> list[Document]:
                     doc.metadata["language"] = "en"
                     doc.metadata["source"] = fname
                 docs.extend(loaded)
-                print(f"     Loaded PDF: {fname} ({len(loaded)} pages)")
+                logger.info("Loaded PDF: %s (%d pages)", fname, len(loaded))
             except Exception as e:
-                print(f"      Could not load {fname}: {e}")
+                logger.warning("Could not load %s: %s", fname, e)
         elif fname.endswith(".txt"):
             path = os.path.join(folder, fname)
             try:
@@ -199,13 +208,16 @@ def ingest(force: bool = False):
                 
             collection = client.get_collection(COLLECTION_NAME)
             if collection.count() > 0:
-                print(f"   Collection already has {collection.count()} vectors. Skipping ingest.")
-                print("     Run with --force to re-ingest.\n")
+                logger.info(
+                    "Collection '%s' already has %d vectors — skipping ingest. "
+                    "Pass --force to re-ingest.",
+                    COLLECTION_NAME, collection.count()
+                )
                 return
         except Exception:
             pass
 
-    print("  Initializing HuggingFace Inference API embeddings...")
+    logger.info("Initializing HuggingFace Inference API embeddings...")
     embeddings = HuggingFaceInferenceAPIEmbeddings(
         api_key=HF_API_KEY,
         api_url=f"https://router.huggingface.co/hf-inference/models/{EMBEDDING_MODEL}"
@@ -218,50 +230,44 @@ def ingest(force: bool = False):
 
     all_docs = []
 
-    # Load .txt files
-    print("  Loading text documents...")
+    logger.info("Loading text documents...")
     sw_docs = load_txt_files(DATA_DIRS["sw"], "sw")
     ki_docs = load_txt_files(DATA_DIRS["ki"], "ki")
-    print(f"     Swahili: {len(sw_docs)} documents")
-    print(f"    Kikuyu:   {len(ki_docs)} documents")
+    logger.info("Swahili: %d documents | Kikuyu: %d documents", len(sw_docs), len(ki_docs))
     all_docs.extend(sw_docs + ki_docs)
 
-    # Load PDFs
-    print("  Loading PDF documents...")
+    logger.info("Loading PDF documents...")
     pdf_docs = load_pdf_files(DATA_DIRS["en"])
-    print(f"     PDFs: {len(pdf_docs)} pages loaded")
+    logger.info("PDFs: %d pages loaded", len(pdf_docs))
     all_docs.extend(pdf_docs)
 
-    # Fall back to seed data if nothing found
     if not all_docs:
-        print("    No documents found in data folders.")
-        print("   Using built-in seed data for demo...")
+        logger.warning("No documents found in data folders — using built-in seed data.")
         all_docs = SEED_DOCS
     else:
-        # Chunk real documents
         all_docs = splitter.split_documents(all_docs)
 
-    print(f"\n   Total chunks to embed: {len(all_docs)}")
-    print("  Embedding and storing (this may take a few minutes)...")
+    logger.info("Total chunks to embed: %d", len(all_docs))
+    logger.info("Embedding and storing (this may take a few minutes)...")
 
     import uuid
 
     if VECTOR_STORE_TYPE == "pinecone" and PINECONE_API_KEY:
         from langchain_pinecone import PineconeVectorStore
-        print(f"    Target: Pinecone Index '{PINECONE_INDEX}'")
+        logger.info("Target: Pinecone Index '%s'", PINECONE_INDEX)
         PineconeVectorStore.from_documents(
             all_docs,
             embeddings,
             index_name=PINECONE_INDEX,
             pinecone_api_key=PINECONE_API_KEY
         )
-        print(f"   {len(all_docs)} chunks stored in Pinecone")
+        logger.info("Pinecone: stored %d chunks", len(all_docs))
     else:
         if CHROMA_SERVER_MODE == "persistent":
-            print(f"    Target: Local ChromaDB (Persistent) at {CHROMA_DIR}")
+            logger.info("Target: Local ChromaDB (Persistent) at %s", CHROMA_DIR)
             client = chromadb.PersistentClient(path=CHROMA_DIR)
         else:
-            print(f"    Target: Remote ChromaDB (HTTP) at {CHROMA_HOST}")
+            logger.info("Target: Remote ChromaDB (HTTP) at %s", CHROMA_HOST)
             client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
             
         collection = client.get_or_create_collection(COLLECTION_NAME)
@@ -269,7 +275,11 @@ def ingest(force: bool = False):
         BATCH_SIZE = 32
         for i in range(0, len(all_docs), BATCH_SIZE):
             batch = all_docs[i:i+BATCH_SIZE]
-            print(f"    Processing batch {i//BATCH_SIZE + 1}/{(len(all_docs) + BATCH_SIZE - 1)//BATCH_SIZE}...")
+            logger.info(
+                "Batch %d/%d...",
+                i // BATCH_SIZE + 1,
+                (len(all_docs) + BATCH_SIZE - 1) // BATCH_SIZE
+            )
             texts = [doc.page_content for doc in batch]
             metadatas = [doc.metadata for doc in batch]
             ids = [str(uuid.uuid4()) for _ in batch]
@@ -287,15 +297,15 @@ def ingest(force: bool = False):
                     success = True
                     break
                 except Exception as e:
-                    print(f"       Error during batch embedding: {e}. Retrying...")
+                    logger.warning("Batch embedding error (attempt %d): %s", attempt + 1, e)
                     import time
                     time.sleep(15)
             
             if not success:
-                print("       Failed to embed batch.")
+                logger.error("Failed to embed batch — aborting.")
                 sys.exit(1)
 
-        print(f"   {len(all_docs)} chunks stored in ChromaDB\n")
+        logger.info("%d chunks stored in ChromaDB", len(all_docs))
 
 
 if __name__ == "__main__":

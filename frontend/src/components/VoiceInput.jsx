@@ -1,10 +1,9 @@
 import { useState, useRef } from "react";
 import axios from "axios";
 
-export default function VoiceInput({ language, onSend, onVoiceResult, loading, sessionId }) {
+export default function VoiceInput({ language, onSend, onVoiceResult, loading, transcribing, setTranscribing, sessionId }) {
   const [text, setText] = useState("");
   const [recording, setRecording] = useState(false);
-  const [transcribing, setTranscribing] = useState(false);
   const mediaRecorder = useRef(null);
   const audioChunks = useRef([]);
   const mimeType = useRef("audio/webm");
@@ -166,7 +165,9 @@ export default function VoiceInput({ language, onSend, onVoiceResult, loading, s
             flexShrink: 0
           }}
         >
-          
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+          </svg>
         </button>
       </div>
     </div>

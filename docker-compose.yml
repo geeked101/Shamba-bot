@@ -26,6 +26,11 @@ services:
       - "8001:8000"
     volumes:
       - ./vectordb/chroma_data:/chroma/chroma
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # ── Python Backend ────────────────────────────────────────────────
   backend:
@@ -46,7 +51,7 @@ services:
       postgres:
         condition: service_healthy
       chromadb:
-        condition: service_started
+        condition: service_healthy
 
   # ── React Frontend ────────────────────────────────────────────────
   frontend:
@@ -54,6 +59,9 @@ services:
     container_name: shamba_frontend
     ports:
       - "3000:3000"
+    environment:
+      # Inside Docker the backend hostname resolves via the service name
+      - REACT_APP_API_URL=http://backend:8000
     depends_on:
       - backend
 

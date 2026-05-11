@@ -13,7 +13,11 @@ export default function App() {
     const [language, setLanguage] = useState("sw");
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [transcribing, setTranscribing] = useState(false);
     const [sessionId] = useState(() => uuidv4());
+
+    // True whenever the UI should block new input
+    const isBusy = loading || transcribing;
 
     useEffect(() => {
         const greetings = {
@@ -88,14 +92,20 @@ export default function App() {
                     {["sw", "ki"].map(lang => (
                         <button
                             key={lang}
-                            onClick={() => setLanguage(lang)}
+                            onClick={() => !isBusy && setLanguage(lang)}
+                            disabled={isBusy}
                             className={`lang-btn ${language === lang ? 'active' : ''}`}
                         >
                             {lang === "sw" ? "Swahili" : "Kikuyu"}
                         </button>
                     ))}
 
-                    <button onClick={handleClearChat} className="lang-btn" style={{ fontSize: '0.8rem', opacity: 0.8 }}>
+                    <button
+                        onClick={handleClearChat}
+                        disabled={isBusy}
+                        className="lang-btn"
+                        style={{ fontSize: '0.8rem', opacity: isBusy ? 0.4 : 0.8 }}
+                    >
                         {language === "sw" ? "Anza Upya" : "Anza Rĩngĩ"}
                     </button>
                 </div>
@@ -118,6 +128,8 @@ export default function App() {
                         onSend={sendMessage}
                         onVoiceResult={handleVoiceResult}
                         loading={loading}
+                        transcribing={transcribing}
+                        setTranscribing={setTranscribing}
                         sessionId={sessionId}
                     />
                 </div>
