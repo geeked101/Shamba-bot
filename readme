@@ -1,10 +1,10 @@
-# Shamba AI (Luna) 🌱
+# Shamba AI (Luna) 
 
 **Shamba AI** is a smart, multilingual agricultural assistant designed to empower farmers in Kenya with instant, reliable, and localized knowledge. By combining advanced AI with curated agricultural expertise, Shamba AI bridges the gap between farmers and critical information.
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
 - **Retrieval-Augmented Generation (RAG)**: Anchored in verified knowledge bases with **mandatory source citation** (KALRO/KARI).
 - **Context-Aware Guidance**: Automatically detects **Location (Counties/Towns)** and **Crops** to tailor advice.
@@ -13,9 +13,9 @@
 - **Premium UI/UX**: Stunning **Glassmorphism web interface** with smooth animations and voice-first design.
 - **Multilingual Support**: Fully fluent in **Swahili**, **Kikuyu**, and **English**, with automatic language detection.
 - **Omni-channel Access**:
-  - 🌐 **Web Dashboard**: Modern, responsive interface.
-  - 📱 **SMS (Africa's Talking)**: Low-bandwidth accessibility.
-  - 💬 **WhatsApp (Twilio)**: Real-time messaging with image support placeholders.
+  -  **Web Dashboard**: Modern, responsive interface.
+  -  **SMS (Africa's Talking)**: Low-bandwidth accessibility.
+  -  **WhatsApp (Twilio)**: Real-time messaging with image support placeholders.
 - **Voice Intelligence**: Send voice notes in Swahili or Kikuyu; processed using the **Groq Whisper API**.
 
 ---
@@ -36,7 +36,7 @@
 
 ---
 
-## 🧠 How it Works
+##  How it Works
 
 1. **Ingest**: Agricultural manuals (PDF/TXT) are processed, chunked, and stored as vectors in ChromaDB.
 2. **Query**: When a farmer asks a question, the system retrieves the most relevant knowledge "chunks."
@@ -45,7 +45,7 @@
 
 ---
 
-## 📖 Local Setup & Development
+## Local Setup & Development
 
 ### Prerequisites
 - Python 3.11+
@@ -65,9 +65,7 @@
 
 ---
 
-## 🌍 Impact
+
 Shamba AI is built to tackle food security by providing 24/7 expert agricultural guidance to those who need it most, in the languages they speak best.
 
 ---
-
-*Developed with ❤️ for the farmers of Kenya.*
